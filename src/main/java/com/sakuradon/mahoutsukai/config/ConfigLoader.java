@@ -1,19 +1,22 @@
 package com.sakuradon.mahoutsukai.config;
 
 import com.google.gson.Gson;
+import com.sakuradon.mahoutsukai.annotation.DefaultValue;
+import com.sakuradon.mahoutsukai.exception.Exceptions;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
-import com.sakuradon.mahoutsukai.log.LoggerRole;
 import jdk.internal.instrumentation.Logger;
 
+import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author SakuraDon
  */
 public class ConfigLoader {
 
-    private static final Logger LOGGER = LoggerFactory.createLogger(LoggerRole.SYSTEM);
+    private static final Logger LOGGER = LoggerFactory.createLogger(ConfigLoader.class);
 
     public Config load(String path) {
         Config config;
@@ -33,21 +36,32 @@ public class ConfigLoader {
             LOGGER.warn("load config failed, use the default config");
             config = new Config();
         }
-        if (config.getAdbPath() == null) {
-            LOGGER.warn("config 'adbPath' is null, use the default value 'adb'");
-            config.setAdbPath("adb");
-        }
-        if (config.getElementPath() == null) {
-            LOGGER.warn("config 'elementPath' is null, use the default value './element'");
-            config.setElementPath("./element");
-        }
-        if (config.getScreenPath() == null) {
-            LOGGER.warn("config 'screenPath' is null, use the default value './screen'");
-            config.setScreenPath("./screen");
-        }
-        if (config.getLoop() == null) {
-            LOGGER.warn("config 'loop' is null, use the default value 'false'");
-            config.setLoop(false);
+        try {
+            Class<?> clz = config.getClass();
+            Field[] fields = clz.getDeclaredFields();
+            for (Field field : fields) {
+                PropertyDescriptor pd = new PropertyDescriptor(field.getName(), clz);
+                Method getMethod = pd.getReadMethod();
+                Object invoke = getMethod.invoke(config);
+                if (invoke == null) {
+                    Method setMethod = pd.getWriteMethod();
+                    String def = field.getAnnotation(DefaultValue.class).value();
+                    String type = field.getGenericType().getTypeName();
+                    LOGGER.warn("config '" + field.getName() + "' is null, use the default value '" + def + "'");
+                    if ("java.lang.Boolean".equals(type)) {
+                        setMethod.invoke(config, Boolean.getBoolean(def));
+                    } else if ("java.lang.Integer".equals(type)) {
+                        setMethod.invoke(config, Integer.getInteger(def));
+                    } else if ("java.lang.Double".equals(type)) {
+                        setMethod.invoke(config, Double.parseDouble(type));
+                    } else {
+                        setMethod.invoke(config, def);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw Exceptions.LOAD_CONFIG_FAILED;
         }
         return config;
     }

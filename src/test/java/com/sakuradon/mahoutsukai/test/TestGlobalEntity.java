@@ -1,10 +1,12 @@
-package com.sakuradon.mahoutsukai;
+package com.sakuradon.mahoutsukai.test;
 
 import com.google.inject.Inject;
+import com.sakuradon.mahoutsukai.annotation.EntityRepository;
 import com.sakuradon.mahoutsukai.entity.EntityFactory;
-import com.sakuradon.mahoutsukai.entity.GlobalEntity;
 import com.sakuradon.mahoutsukai.entity.Point;
+import com.sakuradon.mahoutsukai.entity.GlobalEntity;
 
+@EntityRepository
 public class TestGlobalEntity implements GlobalEntity {
 
     @Inject

@@ -1,15 +1,22 @@
 package com.sakuradon.mahoutsukai.entity;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.sakuradon.mahoutsukai.config.Config;
 import com.sakuradon.mahoutsukai.exception.Exceptions;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * @author SakuraDon
  */
 public class EntityFactoryImpl implements EntityFactory {
+
+    @Inject
+    private Config config;
 
     @Override
     public Point createPoint(int x, int y) {
@@ -23,9 +30,12 @@ public class EntityFactoryImpl implements EntityFactory {
 
     @Override
     public Element createElement(String name, String path) {
+        String base = config.getElementPath();
         try {
-            BufferedImage image = ImageIO.read(new File(path));
+            BufferedImage image = ImageIO.read(new File(base + File.separator + path));
             return new Element(name, image);
+        } catch (FileNotFoundException e) {
+            throw Exceptions.ELEMENT_FILE_NOT_FOUND;
         } catch (Exception e) {
             throw Exceptions.ELEMENT_CREATE_FAILED;
         }

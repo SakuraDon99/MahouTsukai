@@ -1,22 +1,25 @@
 package com.sakuradon.mahoutsukai.log;
 
-import java.text.DateFormat;
+import jdk.internal.instrumentation.Logger;
+import org.fusesource.jansi.Ansi;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * @author SakuraDon
  */
-public class LoggerImpl implements jdk.internal.instrumentation.Logger {
+public class LoggerImpl implements Logger {
 
-    private final String role;
+    private final LoggerRole role;
+
+    private final String clz;
 
     private final LoggerLevel loggerLevel;
 
-    private SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-    public LoggerImpl(String role, LoggerLevel loggerLevel) {
+    public LoggerImpl(LoggerRole role, String clz, LoggerLevel loggerLevel) {
         this.role = role;
+        this.clz = clz;
         this.loggerLevel = loggerLevel;
     }
 
@@ -62,14 +65,36 @@ public class LoggerImpl implements jdk.internal.instrumentation.Logger {
 
     @Override
     public void error(String s, Throwable throwable) {
-        throw new UnsupportedOperationException();
+        error(s);
+        throwable.printStackTrace();
     }
 
     private void print(String s, LoggerLevel l) {
+        String threadName = Thread.currentThread().getName();
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         String date = f.format(new Date());
-        String host = "[" + role + "]";
-        String level = "[" + l.name() + "]";
-        System.out.println(level + " " + date + " " + host + " - " + s);
+        System.out.println(Ansi.ansi()
+                .fg(getLogLevelColor(l)).a(String.format("[%s] ", l.name()))
+                .fg(Ansi.Color.WHITE).a(String.format("%s ", date))
+                .fgCyan().a(String.format("[%s:%s] ", threadName, role.getName()))
+                .fgMagenta().a(String.format("- %s - ", clz)).reset()
+                .a(String.format("%s", s)).reset());
     }
 
+    private Ansi.Color getLogLevelColor(LoggerLevel level) {
+        switch (level) {
+            case TRACE:
+                return Ansi.Color.BLUE;
+            case DEBUG:
+                return Ansi.Color.MAGENTA;
+            case INFO:
+                return Ansi.Color.GREEN;
+            case WARN:
+                return Ansi.Color.YELLOW;
+            case ERROR:
+                return Ansi.Color.RED;
+            default:
+                return Ansi.Color.DEFAULT;
+        }
+    }
 }

@@ -11,6 +11,10 @@ public class Entity {
 
     @Override
     public String toString() {
+        return this.getClass().getSimpleName() + toJsonString();
+    }
+
+    public String toJsonString() {
         return GSON.toJson(this);
     }
 

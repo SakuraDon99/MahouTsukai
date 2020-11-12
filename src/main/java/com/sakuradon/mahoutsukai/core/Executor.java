@@ -1,6 +1,6 @@
 package com.sakuradon.mahoutsukai.core;
 
-import java.util.Queue;
+import java.util.List;
 
 /**
  * @author SakuraDon
@@ -10,8 +10,10 @@ public interface Executor {
     /**
      * 执行任务
      *
-     * @param taskQueue task queue
+     * @param name         name
+     * @param workflowList workflow列表
      */
-    void execute(Queue<Class<? extends Task>> taskQueue);
+    void execute(String name, List<Workflow> workflowList);
+
 
 }

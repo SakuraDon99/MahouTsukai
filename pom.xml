@@ -49,6 +49,21 @@
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/args4j/args4j -->
+        <dependency>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
+            <version>2.33</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
     </dependencies>
 
 </project>

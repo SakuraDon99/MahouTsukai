@@ -1,5 +1,7 @@
 package com.sakuradon.mahoutsukai.entity;
 
+import com.google.inject.ImplementedBy;
+
 /**
  * @author SakuraDon
  */

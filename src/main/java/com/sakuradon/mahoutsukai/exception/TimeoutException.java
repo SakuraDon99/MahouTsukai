@@ -5,9 +5,9 @@ package com.sakuradon.mahoutsukai.exception;
  */
 public class TimeoutException extends RuntimeException {
 
-    private long limitTime;
+    private final long limitTime;
 
-    private long realTime;
+    private final long realTime;
 
     public TimeoutException(long limitTime, long realTime) {
         this.limitTime = limitTime;

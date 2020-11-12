@@ -1,9 +1,9 @@
 package com.sakuradon.mahoutsukai.core;
 
 import com.sakuradon.mahoutsukai.entity.Area;
-import com.sakuradon.mahoutsukai.entity.Element;
 import com.sakuradon.mahoutsukai.entity.Point;
 import com.sakuradon.mahoutsukai.exception.TimeoutException;
+import com.sakuradon.mahoutsukai.entity.Element;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +15,6 @@ import java.util.function.Supplier;
  * @author SakuraDon
  */
 public interface Session {
-
-    /**
-     * session name
-     *
-     * @return name
-     */
-    String getName();
 
     /**
      * 点击
@@ -110,7 +103,18 @@ public interface Session {
      * @param element 元素
      * @return 元素所占区域 | Null
      */
-    Area findElement(Element element);
+    default Area findElement(Element element) {
+        return findElement(element, null);
+    }
+
+    /**
+     * 查找元素
+     *
+     * @param element 元素
+     * @param area    限定区域
+     * @return 元素所占区域 | Null
+     */
+    Area findElement(Element element, Area area);
 
     /**
      * 查找元素组，返回name对应的结果map
@@ -119,6 +123,17 @@ public interface Session {
      * @return map
      */
     default Map<String, Area> findElement(List<Element> elementList) {
+        return findElement(elementList, null);
+    }
+
+    /**
+     * 查找元素组，返回name对应的结果map
+     *
+     * @param elementList 元素组
+     * @param area        限定区域
+     * @return map
+     */
+    default Map<String, Area> findElement(List<Element> elementList, Area area) {
         Map<String, Area> map = new HashMap<>(elementList.size());
         for (Element element : elementList) {
             if (element == null) {
@@ -127,8 +142,7 @@ public interface Session {
             if (element.getName() == null) {
                 continue;
             }
-            Area area = findElement(element);
-            map.put(element.getName(), area);
+            map.put(element.getName(), findElement(element, area));
         }
         return map;
     }
@@ -140,12 +154,23 @@ public interface Session {
      * @return 查找元素的结果
      */
     default Area clickElement(Element element) {
-        Area area = findElement(element);
-        if (area == null) {
+        return clickElement(element, null);
+    }
+
+    /**
+     * 点击元素
+     *
+     * @param element 元素
+     * @param area    限定区域
+     * @return 查找元素的结果
+     */
+    default Area clickElement(Element element, Area area) {
+        Area find = findElement(element, area);
+        if (find == null) {
             return null;
         }
-        click(area);
-        return area;
+        click(find);
+        return find;
     }
 
     /**
@@ -156,12 +181,24 @@ public interface Session {
      * @return 查找元素的结果
      */
     default Area holdElement(Element element, int ms) {
-        Area area = findElement(element);
-        if (area == null) {
+        return holdElement(element, null, ms);
+    }
+
+    /**
+     * 长按元素
+     *
+     * @param element 元素
+     * @param area    限定区域
+     * @param ms      ms
+     * @return 查找元素的结果
+     */
+    default Area holdElement(Element element, Area area, int ms) {
+        Area find = findElement(element, area);
+        if (find == null) {
             return null;
         }
-        hold(area, ms);
-        return area;
+        hold(find, ms);
+        return find;
     }
 
     /**

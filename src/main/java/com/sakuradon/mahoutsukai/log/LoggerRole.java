@@ -18,7 +18,7 @@ public enum LoggerRole {
     /**
      * known
      */
-    UNKNOWN("known");
+    UNKNOWN("unknown");
 
     /**
      * name

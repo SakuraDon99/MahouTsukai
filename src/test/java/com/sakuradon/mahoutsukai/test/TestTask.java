@@ -1,16 +1,17 @@
-package com.sakuradon.mahoutsukai;
+package com.sakuradon.mahoutsukai.test;
 
 import com.google.inject.Inject;
-import com.sakuradon.mahoutsukai.core.AbstractTask;
-import com.sakuradon.mahoutsukai.core.Session;
+import com.sakuradon.mahoutsukai.android.Adb;
+import com.sakuradon.mahoutsukai.annotation.EnableTask;
+import com.sakuradon.mahoutsukai.core.Task;
 import com.sakuradon.mahoutsukai.core.TaskChain;
-import com.sakuradon.mahoutsukai.entity.Element;
+import com.sakuradon.mahoutsukai.core.Session;
 import com.sakuradon.mahoutsukai.entity.EntityFactory;
-import com.sakuradon.mahoutsukai.entity.Point;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
 import jdk.internal.instrumentation.Logger;
 
-public class TestTask extends AbstractTask {
+@EnableTask
+public class TestTask implements Task {
 
     private static final Logger LOGGER = LoggerFactory.createLogger(TestTask.class);
 
@@ -21,17 +22,19 @@ public class TestTask extends AbstractTask {
     private Session session;
 
     @Inject
+    private Adb adb;
+
+    @Inject
     private TestGlobalEntity testGlobalEntity;
 
     @Override
     public String getName() {
-        return "test task";
+        return "test";
     }
 
     @Override
     public void execute(TaskChain taskChain) {
         LOGGER.info(testGlobalEntity.getDemoPoint().toString());
-        session.click(1, 4);
     }
 
 }
