@@ -13,15 +13,15 @@ import java.util.List;
  */
 public class WorkflowModule extends AbstractModule {
 
-    private final List<Class<? extends Workflow>> classList = new ArrayList<>();
+    private final List<Class<?>> classList = new ArrayList<>();
 
-    public void addClass(Class<? extends Workflow> clz) {
+    public void addClass(Class<?> clz) {
         classList.add(clz);
     }
 
     @Override
     protected void configure() {
-        for (Class<? extends Workflow> clz : classList) {
+        for (Class<?> clz : classList) {
             bind(clz);
         }
     }

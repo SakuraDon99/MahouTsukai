@@ -16,15 +16,15 @@ import java.util.Queue;
  */
 public class TaskModule extends AbstractModule {
 
-    private final List<Class<? extends Task>> classList = new ArrayList<>();
+    private final List<Class<?>> classList = new ArrayList<>();
 
-    public void addClass(Class<? extends Task> clz) {
+    public void addClass(Class<?> clz) {
         classList.add(clz);
     }
 
     @Override
     protected void configure() {
-        for (Class<? extends Task> clz : classList) {
+        for (Class<?> clz : classList) {
             bind(clz);
         }
     }

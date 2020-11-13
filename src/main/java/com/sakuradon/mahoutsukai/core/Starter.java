@@ -30,9 +30,9 @@ public class Starter {
 
     private final Class<?> main;
 
-    private final Map<String, Class<? extends Workflow>> workflowMap = new HashMap<>();
+    private final Map<String, Class<?>> workflowMap = new HashMap<>();
 
-    private final List<Class<? extends GlobalEntity>> globalEntityList = new ArrayList<>();
+    private final List<Class<?>> globalEntityList = new ArrayList<>();
 
     public Starter(Class<?> main) {
         this.main = main;
@@ -67,21 +67,21 @@ public class Starter {
                     if ("".equals(name)) {
                         name = clz.getSimpleName();
                     }
-                    workflowMap.put(name, (Class<? extends Workflow>) clz);
-                    workflowModule.addClass((Class<? extends Workflow>) clz);
+                    workflowMap.put(name, clz);
+                    workflowModule.addClass(clz);
                 } else if (Task.class.isAssignableFrom(clz) && clz.getAnnotation(EnableTask.class) != null) {
-                    taskModule.addClass((Class<? extends Task>) clz);
+                    taskModule.addClass(clz);
                 } else if (GlobalEntity.class.isAssignableFrom(clz) &&
                         clz.getAnnotation(EntityRepository.class) != null) {
-                    globalEntityList.add((Class<? extends GlobalEntity>) clz);
-                    globalEntityModule.addClass((Class<? extends GlobalEntity>) clz);
+                    globalEntityList.add(clz);
+                    globalEntityModule.addClass(clz);
                 }
             }
             // 依赖注入
             // baseInjector 通用依赖
             Injector baseInjector = Guice.createInjector(basicModule, globalEntityModule, workflowModule);
-            for (Class<? extends GlobalEntity> clz : globalEntityList) {
-                baseInjector.getInstance(clz).initialize();
+            for (Class<?> clz : globalEntityList) {
+                ((GlobalEntity) baseInjector.getInstance(clz)).initialize();
             }
 
             for (String dev : devices) {
@@ -98,6 +98,9 @@ public class Starter {
                     if (workflows.length == 1 && "".equals(wf)) {
                         if (workflowMap.size() > 1) {
                             throw Exceptions.NO_SELECT_WORKFLOW;
+                        }
+                        if (workflowMap.size() == 0) {
+                            throw Exceptions.NO_ENABLE_WORKFLOW;
                         }
                         workflowMap.forEach((k, workflow) -> workflowList.add(instanceWorkflowTask(k, workInjector)));
                     } else {
@@ -116,11 +119,11 @@ public class Starter {
     }
 
     private Workflow instanceWorkflowTask(String name, Injector injector) {
-        Class<? extends Workflow> clz = workflowMap.get(name);
+        Class<?> clz = workflowMap.get(name);
         if (clz == null) {
             throw Exceptions.WORKFLOW_NOT_FOUND;
         }
-        Workflow workflow = injector.getInstance(clz);
+        Workflow workflow = (Workflow) injector.getInstance(clz);
         workflow.configure();
         for (Class<? extends Task> taskClz : workflow.getTaskClassQueue()) {
             Task task = injector.getInstance(taskClz);

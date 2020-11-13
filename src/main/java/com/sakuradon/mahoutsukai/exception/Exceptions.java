@@ -36,6 +36,9 @@ public class Exceptions {
             new SystemException(105, "illegal workflow, please use the EnableWorkflow annotation");
 
     public static final SystemException ILLEGAL_TASK =
-            new SystemException(106, "illegal workflow, please use the EnableTask annotation");
+            new SystemException(106, "illegal task, please use the EnableTask annotation");
+
+    public static final SystemException NO_ENABLE_WORKFLOW =
+            new SystemException(107, "there are no enable workflow to execute");
 
 }
