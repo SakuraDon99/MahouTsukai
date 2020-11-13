@@ -29,4 +29,13 @@ public class Exceptions {
     public static final SystemException WORKFLOW_NOT_FOUND =
             new SystemException(103, "workflow not found");
 
+    public static final SystemException TASK_NOT_FOUND =
+            new SystemException(104, "task not found");
+
+    public static final SystemException ILLEGAL_WORKFLOW =
+            new SystemException(105, "illegal workflow, please use the EnableWorkflow annotation");
+
+    public static final SystemException ILLEGAL_TASK =
+            new SystemException(106, "illegal workflow, please use the EnableTask annotation");
+
 }

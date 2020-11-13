@@ -25,7 +25,7 @@ public class TaskModule extends AbstractModule {
     @Override
     protected void configure() {
         for (Class<? extends Task> clz : classList) {
-            bind(clz).in(Scopes.SINGLETON);
+            bind(clz);
         }
     }
 

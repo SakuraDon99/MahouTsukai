@@ -22,7 +22,7 @@ public class WorkflowModule extends AbstractModule {
     @Override
     protected void configure() {
         for (Class<? extends Workflow> clz : classList) {
-            bind(clz).in(Scopes.SINGLETON);
+            bind(clz);
         }
     }
 

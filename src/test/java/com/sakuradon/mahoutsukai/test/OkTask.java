@@ -1,18 +1,15 @@
 package com.sakuradon.mahoutsukai.test;
 
 import com.sakuradon.mahoutsukai.annotation.EnableTask;
-import com.sakuradon.mahoutsukai.core.Task;
+import com.sakuradon.mahoutsukai.core.AbstractTask;
 import com.sakuradon.mahoutsukai.core.TaskChain;
 
 @EnableTask
-public class OkTask implements Task {
-    @Override
-    public String getName() {
-        return "ok";
-    }
+public class OkTask extends AbstractTask {
 
     @Override
     public void execute(TaskChain taskChain) {
         System.out.println("ok");
     }
+
 }

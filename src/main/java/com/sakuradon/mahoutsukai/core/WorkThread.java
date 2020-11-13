@@ -18,13 +18,11 @@ public class WorkThread extends Thread {
     
     private final String name;
 
-    private final boolean loop;
 
     private final List<Workflow> workflowList;
 
-    public WorkThread(String name, boolean loop, List<Workflow> workflowList) {
+    public WorkThread(String name, List<Workflow> workflowList) {
         this.name = name;
-        this.loop = loop;
         this.workflowList = workflowList;
     }
 
@@ -43,9 +41,6 @@ public class WorkThread extends Thread {
                     Class<? extends Task> taskClz = task.getClass();
                     Integer executionTimes = executionTimesMap.getOrDefault(taskClz.getName(), -1) + 1;
                     executionTimesMap.put(taskClz.getName(), executionTimes);
-                    if (loop) {
-                        taskQueue.add(task);
-                    }
                     inExecutionTask = task;
                     LOGGER.info(String.format("task {%s} start", task.getName()));
                     taskChain.setNextTask(taskQueue.isEmpty() ? null : taskQueue.peek().getClass());

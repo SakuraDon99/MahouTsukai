@@ -20,7 +20,7 @@ public class ExecutorImpl implements Executor {
     @Override
     public void execute(String name, List<Workflow> workflowList) {
         LOGGER.debug(String.format("start new thread {%s}", name));
-        new WorkThread(name, config.getLoop(), workflowList).start();
+        new WorkThread(name, workflowList).start();
     }
 
 }

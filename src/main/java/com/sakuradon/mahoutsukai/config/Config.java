@@ -16,9 +16,6 @@ public class Config {
     @DefaultValue("./screen")
     private String screenPath;
 
-    @DefaultValue("false")
-    private Boolean loop;
-
     public String getAdbPath() {
         return adbPath;
     }
@@ -43,21 +40,12 @@ public class Config {
         this.screenPath = screenPath;
     }
 
-    public Boolean getLoop() {
-        return loop;
-    }
-
-    public void setLoop(Boolean loop) {
-        this.loop = loop;
-    }
-
     @Override
     public String toString() {
         return "Config{" +
                 "adbPath='" + adbPath + '\'' +
                 ", elementPath='" + elementPath + '\'' +
                 ", screenPath='" + screenPath + '\'' +
-                ", loop=" + loop +
                 '}';
     }
 

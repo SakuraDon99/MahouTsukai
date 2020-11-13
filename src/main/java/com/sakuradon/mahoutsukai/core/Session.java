@@ -202,6 +202,18 @@ public interface Session {
     }
 
     /**
+     * 延时
+     *
+     * @param ms ms
+     */
+    default void delay(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+    /**
      * time out
      *
      * @param function function
