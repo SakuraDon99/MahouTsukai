@@ -1,7 +1,6 @@
 package com.sakuradon.mahoutsukai.log;
 
 import com.sakuradon.mahoutsukai.core.Task;
-import jdk.internal.instrumentation.Logger;
 
 /**
  * @author SakuraDon

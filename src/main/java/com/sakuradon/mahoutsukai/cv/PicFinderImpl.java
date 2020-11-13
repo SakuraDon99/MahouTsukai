@@ -1,11 +1,10 @@
 package com.sakuradon.mahoutsukai.cv;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.sakuradon.mahoutsukai.entity.Point;
 import com.sakuradon.mahoutsukai.entity.EntityFactory;
+import com.sakuradon.mahoutsukai.log.Logger;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
-import jdk.internal.instrumentation.Logger;
 
 import java.awt.image.BufferedImage;
 
@@ -64,7 +63,7 @@ public class PicFinderImpl implements PicFinder {
         int rgb1 = source.getRGB(x1, y1);
         int rgb2 = target.getRGB(x2, y2);
         if (rgb1 != rgb2) {
-            LOGGER.trace(String.format("rgb %d (%d, %d) and %d (%d, %d) not same", rgb1, x1, y1, rgb2, x2, y2));
+            LOGGER.trace("rgb %d (%d, %d) and %d (%d, %d) not same", rgb1, x1, y1, rgb2, x2, y2);
             return false;
         }
         return true;

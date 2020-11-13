@@ -9,8 +9,8 @@ import com.sakuradon.mahoutsukai.core.Session;
 import com.sakuradon.mahoutsukai.cv.PicFinder;
 import com.sakuradon.mahoutsukai.entity.Element;
 import com.sakuradon.mahoutsukai.entity.EntityFactory;
+import com.sakuradon.mahoutsukai.log.Logger;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
-import jdk.internal.instrumentation.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -38,25 +38,25 @@ public class AndroidSession implements Session {
 
     @Override
     public void click(int x, int y) {
-        LOGGER.debug("click " + x + " " + y);
+        LOGGER.debug("click %d %d", x, y);
         adb.tap(x, y);
     }
 
     @Override
     public void hold(int x, int y, int ms) {
-        LOGGER.debug("hold " + x + " " + y + " " + ms + "ms");
+        LOGGER.debug("hold %d %d %d ms", x, y, ms);
         adb.swipe(x, y, x, y, ms);
     }
 
     @Override
     public void move(int x1, int y1, int x2, int y2, int ms) {
-        LOGGER.debug("move " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + ms + "ms");
+        LOGGER.debug("move %d %d %d %d %d ms", x1, y1, x2, y2, ms);
         adb.swipe(x1, y1, x2, y2, ms);
     }
 
     @Override
     public Area findElement(Element element, Area area) {
-        LOGGER.debug("find element " + element.getName());
+        LOGGER.debug("find element %s", element.getName());
         String androidScreen = "/dev/screencap.png";
         String localScreen = config.getScreenPath() + File.separator + "screencap.png";
         adb.screenCap(androidScreen);

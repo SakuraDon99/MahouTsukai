@@ -3,9 +3,9 @@ package com.sakuradon.mahoutsukai.android;
 import com.google.inject.Inject;
 import com.sakuradon.mahoutsukai.config.Config;
 import com.sakuradon.mahoutsukai.exception.Exceptions;
+import com.sakuradon.mahoutsukai.log.Logger;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
 import com.sakuradon.mahoutsukai.utils.StringUtil;
-import jdk.internal.instrumentation.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class Adb {
     }
 
     private void exec(String script) {
-        LOGGER.trace(String.format("adb exec {%s}", script));
+        LOGGER.trace("adb exec {%s}", script);
         try {
             Process process = Runtime.getRuntime().exec(script);
             BufferedReader readStdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -81,11 +81,11 @@ public class Adb {
             String stdout = stdoutSb.toString();
             String stderr = stderrSb.toString();
             if (!StringUtil.isBlank(stderr)) {
-                LOGGER.trace("exec error:" + "\n" + stderr);
+                LOGGER.trace("exec error:\n" + stderr);
                 throw Exceptions.ADB_EXEC_FAILED;
             }
             if (!StringUtil.isBlank(stdout)) {
-                LOGGER.trace("exec result:" + "\n" + stdout);
+                LOGGER.trace("exec result:\n" + stdout);
             }
         } catch (IOException e) {
             throw Exceptions.ADB_EXEC_FAILED;

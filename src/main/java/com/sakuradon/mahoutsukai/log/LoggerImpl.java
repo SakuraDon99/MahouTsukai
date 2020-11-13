@@ -1,6 +1,5 @@
 package com.sakuradon.mahoutsukai.log;
 
-import jdk.internal.instrumentation.Logger;
 import org.fusesource.jansi.Ansi;
 
 import java.text.SimpleDateFormat;
@@ -64,7 +63,7 @@ public class LoggerImpl implements Logger {
     }
 
     @Override
-    public void error(String s, Throwable throwable) {
+    public void error(Throwable throwable, String s) {
         error(s);
         throwable.printStackTrace();
     }

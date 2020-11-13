@@ -1,8 +1,8 @@
 package com.sakuradon.mahoutsukai.core;
 
 import com.sakuradon.mahoutsukai.exception.SystemException;
+import com.sakuradon.mahoutsukai.log.Logger;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
-import jdk.internal.instrumentation.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,7 @@ public class WorkThread extends Thread {
     public void run() {
         for (Workflow workflow : workflowList) {
             Thread.currentThread().setName(name + ":" + workflow.getName());
-            LOGGER.info(String.format("workflow {%s} start", workflow.getName()));
+            LOGGER.info("workflow {%s} start", workflow.getName());
             Queue<Task> taskQueue = workflow.getTaskQueue();
             Task inExecutionTask = null;
             try {
@@ -42,21 +42,21 @@ public class WorkThread extends Thread {
                     Integer executionTimes = executionTimesMap.getOrDefault(taskClz.getName(), -1) + 1;
                     executionTimesMap.put(taskClz.getName(), executionTimes);
                     inExecutionTask = task;
-                    LOGGER.info(String.format("task {%s} start", task.getName()));
+                    LOGGER.info("task {%s} start", task.getName());
                     taskChain.setNextTask(taskQueue.isEmpty() ? null : taskQueue.peek().getClass());
                     taskChain.setExecutionTimes(executionTimes);
                     task.beforeExecute(taskChain);
                     task.execute(taskChain);
                     task.afterExecute(taskChain);
-                    LOGGER.info(String.format("task {%s} completed", task.getName()));
+                    LOGGER.info("task {%s} completed", task.getName());
                     taskChain.setPreTask(taskClz);
                 }
-                LOGGER.info(String.format("workflow {%s} completed", workflow.getName()));
+                LOGGER.info("workflow {%s} completed", workflow.getName());
             } catch (SystemException e) {
-                LOGGER.error(String.format("(code %d) %s", e.getCode(), e.getMsg()), e);
+                LOGGER.error(e, "(code %d) %s", e.getCode(), e.getMsg());
             } catch (Exception e) {
-                LOGGER.error(String.format("task {%s} execute failed",
-                        inExecutionTask == null ? "null" : inExecutionTask.getName()), e);
+                LOGGER.error(e, "task {%s} execute failed",
+                        inExecutionTask == null ? "null" : inExecutionTask.getName());
             }
         }
     }

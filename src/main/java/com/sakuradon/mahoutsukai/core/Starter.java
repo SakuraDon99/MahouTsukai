@@ -13,9 +13,9 @@ import com.sakuradon.mahoutsukai.entity.GlobalEntity;
 import com.sakuradon.mahoutsukai.exception.Exceptions;
 import com.sakuradon.mahoutsukai.exception.SystemException;
 import com.sakuradon.mahoutsukai.inject.*;
+import com.sakuradon.mahoutsukai.log.Logger;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
 import com.sakuradon.mahoutsukai.utils.ClassUtil;
-import jdk.internal.instrumentation.Logger;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
@@ -99,9 +99,7 @@ public class Starter {
                         if (workflowMap.size() > 1) {
                             throw Exceptions.NO_SELECT_WORKFLOW;
                         }
-                        workflowMap.forEach((k, workflow) -> {
-                            workflowList.add(instanceWorkflowTask(k, workInjector));
-                        });
+                        workflowMap.forEach((k, workflow) -> workflowList.add(instanceWorkflowTask(k, workInjector)));
                     } else {
                         workflowList.add(instanceWorkflowTask(wf, workInjector));
                     }
@@ -109,11 +107,11 @@ public class Starter {
                 executor.execute(adb.getDevice(), workflowList);
             }
         } catch (CmdLineException e) {
-            LOGGER.error("resolve parameter failed", e);
+            LOGGER.error(e, "resolve parameter failed");
         } catch (SystemException e) {
-            LOGGER.error(String.format("(code %d) %s", e.getCode(), e.getMsg()), e);
+            LOGGER.error(e, "(code %d) %s", e.getCode(), e.getMsg());
         } catch (Exception e) {
-            LOGGER.error("system start failed", e);
+            LOGGER.error(e, "system start failed");
         }
     }
 

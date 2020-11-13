@@ -3,8 +3,8 @@ package com.sakuradon.mahoutsukai.config;
 import com.google.gson.Gson;
 import com.sakuradon.mahoutsukai.annotation.DefaultValue;
 import com.sakuradon.mahoutsukai.exception.Exceptions;
+import com.sakuradon.mahoutsukai.log.Logger;
 import com.sakuradon.mahoutsukai.log.LoggerFactory;
-import jdk.internal.instrumentation.Logger;
 
 import java.beans.PropertyDescriptor;
 import java.io.*;
@@ -21,7 +21,7 @@ public class ConfigLoader {
     public Config load(String path) {
         Config config;
         try {
-            LOGGER.info("loading config from {" + path + "}");
+            LOGGER.info("loading config from {%s}", path);
             StringBuilder result = new StringBuilder();
             BufferedReader br = new BufferedReader(new FileReader(path));
             String s;
@@ -47,7 +47,7 @@ public class ConfigLoader {
                     Method setMethod = pd.getWriteMethod();
                     String def = field.getAnnotation(DefaultValue.class).value();
                     String type = field.getGenericType().getTypeName();
-                    LOGGER.warn("config '" + field.getName() + "' is null, use the default value '" + def + "'");
+                    LOGGER.warn("config '%s' is null, use the default value '%s'", field.getName(), def);
                     if ("java.lang.Boolean".equals(type)) {
                         setMethod.invoke(config, Boolean.getBoolean(def));
                     } else if ("java.lang.Integer".equals(type)) {
